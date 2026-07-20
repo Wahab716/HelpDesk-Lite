@@ -1,5 +1,7 @@
+import type { TicketPriority } from "../types/ticket";
+
 type PriorityBadgeProps = {
-  priority: "low" | "medium" | "high";
+  priority: TicketPriority;
 };
 
 function PriorityBadge({ priority }: PriorityBadgeProps) {

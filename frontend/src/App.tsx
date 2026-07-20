@@ -2,6 +2,7 @@ import Navbar from "./components/Navbar";
 import Button from "./components/Button";
 import Input from "./components/Input";
 import TicketCard from "./components/TicketCard";
+import { tickets } from "./data/tickets";
 
 function App() {
   return (
@@ -56,36 +57,16 @@ function App() {
               <div>
                 <h2 className="text-xl font-bold">Recent Tickets</h2>
                 <p className="text-sm text-slate-600">
-                  These are fake tickets for now, later they will come from the
+                  These are fake tickets for now. Later they will come from the
                   backend.
                 </p>
               </div>
             </div>
 
             <div className="grid gap-4">
-              <TicketCard
-                title="Wi-Fi not working"
-                description="My laptop keeps disconnecting from the office Wi-Fi."
-                category="Network"
-                status="open"
-                priority="high"
-              />
-
-              <TicketCard
-                title="Password reset needed"
-                description="I forgot my password and cannot log into my account."
-                category="Account"
-                status="in_progress"
-                priority="medium"
-              />
-
-              <TicketCard
-                title="Monitor has no display"
-                description="The monitor is plugged in, but the screen stays black."
-                category="Hardware"
-                status="resolved"
-                priority="low"
-              />
+              {tickets.map((ticket) => (
+                <TicketCard key={ticket.id} ticket={ticket} />
+              ))}
             </div>
           </section>
         </div>

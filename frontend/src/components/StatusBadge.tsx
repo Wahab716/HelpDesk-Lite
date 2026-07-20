@@ -1,5 +1,7 @@
+import type { TicketStatus } from "../types/ticket";
+
 type StatusBadgeProps = {
-  status: "open" | "in_progress" | "resolved";
+  status: TicketStatus;
 };
 
 function StatusBadge({ status }: StatusBadgeProps) {
