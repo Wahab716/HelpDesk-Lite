@@ -1,76 +1,68 @@
+import { useState } from "react";
+import { Route, Routes } from "react-router";
 import Navbar from "./components/Navbar";
-import Button from "./components/Button";
-import Input from "./components/Input";
-import TicketCard from "./components/TicketCard";
-import { tickets } from "./data/tickets";
+import { initialTickets } from "./data/tickets";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
+import CreateTicketPage from "./pages/CreateTicketPage";
+import TicketDetailsPage from "./pages/TicketDetailsPage";
+import type { NewTicket, Ticket } from "./types/ticket";
 
 function App() {
+  const [tickets, setTickets] = useState<Ticket[]>(initialTickets);
+
+  function addTicket(ticketData: NewTicket) {
+    setTickets((currentTickets) => {
+      const nextId =
+        currentTickets.length === 0
+          ? 1
+          : Math.max(
+              ...currentTickets.map((ticket) => ticket.id)
+            ) + 1;
+
+      const newTicket: Ticket = {
+        id: nextId,
+        title: ticketData.title,
+        description: ticketData.description,
+        category: ticketData.category,
+        priority: ticketData.priority,
+        status: "open",
+      };
+
+      return [newTicket, ...currentTickets];
+    });
+  }
+
   return (
     <main className="min-h-screen bg-slate-100 text-slate-900">
       <Navbar />
 
-      <section className="mx-auto max-w-6xl px-6 py-10">
-        <div className="mb-8 rounded-2xl bg-white p-8 shadow-sm">
-          <p className="mb-3 text-sm font-semibold uppercase tracking-wide text-blue-600">
-            HelpDesk Lite
-          </p>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
 
-          <h1 className="mb-4 text-4xl font-bold">
-            IT Ticketing & Support Dashboard
-          </h1>
+        <Route path="/login" element={<LoginPage />} />
 
-          <p className="mb-8 max-w-2xl text-lg text-slate-600">
-            A full-stack support dashboard where employees can submit tickets
-            and support teams can manage status, priority, comments, and
-            dashboard stats.
-          </p>
+        <Route path="/register" element={<RegisterPage />} />
 
-          <div className="flex flex-wrap gap-3">
-            <Button>Create Ticket</Button>
-            <Button variant="secondary">View Dashboard</Button>
-          </div>
-        </div>
+        <Route
+          path="/dashboard"
+          element={<DashboardPage tickets={tickets} />}
+        />
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_2fr]">
-          <section className="rounded-2xl bg-white p-6 shadow-sm">
-            <h2 className="mb-4 text-xl font-bold">Quick Ticket Form</h2>
+        <Route
+          path="/tickets/new"
+          element={
+            <CreateTicketPage onCreateTicket={addTicket} />
+          }
+        />
 
-            <form className="space-y-4">
-              <Input
-                label="Ticket Title"
-                id="ticket-title"
-                placeholder="Example: Wi-Fi not working"
-              />
-
-              <Input
-                label="Category"
-                id="ticket-category"
-                placeholder="Example: Network"
-              />
-
-              <Button type="submit">Submit Ticket</Button>
-            </form>
-          </section>
-
-          <section>
-            <div className="mb-4 flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold">Recent Tickets</h2>
-                <p className="text-sm text-slate-600">
-                  These are fake tickets for now. Later they will come from the
-                  backend.
-                </p>
-              </div>
-            </div>
-
-            <div className="grid gap-4">
-              {tickets.map((ticket) => (
-                <TicketCard key={ticket.id} ticket={ticket} />
-              ))}
-            </div>
-          </section>
-        </div>
-      </section>
+        <Route
+          path="/tickets/:ticketId"
+          element={<TicketDetailsPage tickets={tickets} />}
+        />
+      </Routes>
     </main>
   );
 }

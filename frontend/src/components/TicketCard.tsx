@@ -1,4 +1,5 @@
-import type { Ticket } from "../types/ticket";
+import { Link } from "react-router";
+import type { Ticket, TicketCategory } from "../types/ticket";
 import StatusBadge from "./StatusBadge";
 import PriorityBadge from "./PriorityBadge";
 import Button from "./Button";
@@ -7,7 +8,7 @@ type TicketCardProps = {
   ticket: Ticket;
 };
 
-function formatCategory(category: string) {
+function formatCategory(category: TicketCategory) {
   if (category === "hardware") {
     return "Hardware";
   }
@@ -24,11 +25,7 @@ function formatCategory(category: string) {
     return "Network";
   }
 
-  if (category === "other") {
-    return "Other";
-  }
-
-  return category;
+  return "Other";
 }
 
 function TicketCard({ ticket }: TicketCardProps) {
@@ -40,9 +37,7 @@ function TicketCard({ ticket }: TicketCardProps) {
             {ticket.title}
           </h3>
 
-          <p className="mt-1 text-sm text-slate-600">
-            {ticket.description}
-          </p>
+          <p className="mt-1 text-sm text-slate-600">{ticket.description}</p>
         </div>
 
         <StatusBadge status={ticket.status} />
@@ -56,7 +51,9 @@ function TicketCard({ ticket }: TicketCardProps) {
         </span>
       </div>
 
-      <Button variant="secondary">View Details</Button>
+      <Link to={`/tickets/${ticket.id}`}>
+        <Button variant="secondary">View Details</Button>
+      </Link>
     </article>
   );
 }

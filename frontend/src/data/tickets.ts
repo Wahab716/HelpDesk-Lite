@@ -1,6 +1,6 @@
 import type { Ticket } from "../types/ticket";
 
-export const tickets: Ticket[] = [
+export const initialTickets: Ticket[] = [
   {
     id: 1,
     title: "Wi-Fi not working",
